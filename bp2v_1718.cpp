@@ -16,19 +16,21 @@ const color black(0, 0, 0);
 const color white(255, 255, 255);
 const color grey(200,200,200);
 
+enum Rendezes {AR, ID};
+
 struct Tetelek {
     string nev;
-    int ar;
-    Tetelek(string neve, int ara) : nev(neve), ar(ara) {}
+    int ar, id;
+    Tetelek(string neve, int ara, int sorrend) : nev(neve), ar(ara), id(sorrend) {}
 };
 
 ostream& operator<< (ostream& ki, Tetelek t) {
     return ki << t.nev << ": " << t.ar << " Ft";
 }
 
-vector<string> tetelek2string(vector<Tetelek> vt) {
+vector<string> tetelek2string(const vector<Tetelek>& vt) {
     vector<string> v;
-    for (Tetelek t : vt) {
+    for (const Tetelek& t : vt) {
         stringstream ss;
         ss << t;
         v.push_back(ss.str());
@@ -37,6 +39,7 @@ vector<string> tetelek2string(vector<Tetelek> vt) {
 }
 
 class BpV8 : public Application {
+    Rendezes rend;
     TextInput * nev;
     NumericIN * ar;
     Button * hozzaad;
@@ -46,13 +49,17 @@ class BpV8 : public Application {
     List * termekek;
     TextBox * egyenleg;
     vector<Tetelek> tetel;
+    vector<Tetelek> rtetel;
     TextBox * fajlszoveg;
     TextInput * fajlnev;
     Button * betolt;
     Button * kiment;
+    List * rendezo;
+    Button * rendezob;
 public:
-    BpV8() : Application(white, 500, 400) {
+    BpV8() : Application(white, 550, 400) {
         gout.load_font(fontfile, 15);
+        rend = ID;
 
         nev = new TextInput(this, 20, 20, 300, 25);
         ar = new NumericIN(this, 20, 55, 150, 25, -10000, 10000);
@@ -68,57 +75,94 @@ public:
         betolt = new Button(this, _window_width - 110, _window_height - 45, 90, 25, "Betölt", [=](){betoltes();}, fontfile, 15, grey, black);
         kiment = new Button(this, _window_width - 210, _window_height - 45, 90, 25, "Mentés", [=](){mentes();}, fontfile, 15, grey, black);
 
+        vector<string> tmplist(2);
+        tmplist[0] = "Eredeti";
+        tmplist[1] = "Ár szerint";
+        rendezo = new List(this, _window_width - 120, 20, 100, 25, 100, tmplist, fontfile, 15);
+        rendezob = new Button(this, _window_width - 110, 55, 90, 25, "Rendezés", [=](){atrendez();}, fontfile, 15, grey, black);
+
         for (Widget * ww : _widgets) {ww->print(false);}
         gout << refresh;
     }
     void action(event) override {}
     void egyenlegFrissit() {
         int c = 0;
-        for (Tetelek t : tetel) {
+        for (const Tetelek& t : tetel) {
             c += t.ar;
         }
         stringstream ss;
         ss << "Egyenleg: "<< c << " Ft";
         egyenleg->update(ss.str());
     }
+    void arRendez() {
+        rtetel = tetel;
+        for (size_t i = 0; i < rtetel.size() - 1; i++) {
+            for (size_t j = 0; j < rtetel.size() - 1 - i; j++) {
+                if (rtetel[j + 1].ar > rtetel[j].ar) {
+                    Tetelek tmp = rtetel[j + 1];
+                    rtetel[j + 1] = rtetel[j];
+                    rtetel[j] = tmp;
+                }
+            }
+        }
+    }
+    void idRendez() {
+        rtetel = tetel;
+    }
+    void listFrissit() {
+        if (rend == ID) {
+            idRendez();
+        } else if (rend == AR) {
+            arRendez();
+        }
+        termekek->update(tetelek2string(rtetel));
+    }
+    void atrendez() {
+        if (rendezo->getSelected() == 0) {rend = ID;}
+        if (rendezo->getSelected() == 1) {rend = AR;}
+        if (rendezo->getSelected() != -1) {listFrissit();}
+    }
     void ujTetel() {
-        if (nev->getText() != "") {
-            tetel.push_back(Tetelek(nev->getText(), ar->getValue()));
-            termekek->update(tetelek2string(tetel));
+        if (!nev->getText().empty()) {
+            tetel.push_back(Tetelek(nev->getText(), ar->getValue(), tetel.size()));
+            listFrissit();
             egyenlegFrissit();
         }
     }
     void torolTetel() {
         if (termekek->getSelected() != -1) {
-            tetel.erase(tetel.begin() + termekek->getSelected());
-            termekek->update(tetelek2string(tetel));
+            tetel.erase(tetel.begin() + rtetel[termekek->getSelected()].id);
+            for (size_t i = 0; i < tetel.size(); i++) {
+                tetel[i].id = i;
+            }
+            listFrissit();
             egyenlegFrissit();
         }
     }
     void mindenTorol() {
         tetel.clear();
-        termekek->update(tetelek2string(tetel));
+        listFrissit();
         egyenlegFrissit();
     }
     void modositTetel() {
-        if (termekek->getSelected() != -1 and nev->getText() != "") {
-            tetel[termekek->getSelected()].nev = nev->getText();
-            tetel[termekek->getSelected()].ar = ar->getValue();
-            termekek->update(tetelek2string(tetel));
+        if (termekek->getSelected() != -1 and !nev->getText().empty()) {
+            tetel[rtetel[termekek->getSelected()].id].nev = nev->getText();
+            tetel[rtetel[termekek->getSelected()].id].ar = ar->getValue();
+            listFrissit();
             egyenlegFrissit();
         }
     }
     void mentes() {
-        if (fajlnev->getText() != "") {
+        if (!fajlnev->getText().empty()) {
             ofstream kifajl(fajlnev->getText());
-            for (Tetelek t : tetel) {
+            for (const Tetelek& t : tetel) {
                 kifajl << t << endl;
             }
             kifajl.close();
         }
     }
     void betoltes() {
-        if (fajlnev->getText() != "") {
+        if (!fajlnev->getText().empty()) {
             ifstream befajl(fajlnev->getText());
             if (befajl.good()) {
                 vector<Tetelek> vt;
@@ -126,12 +170,12 @@ public:
                     string tmps, clrs;
                     int tmpi;
                     getline(befajl, tmps, ':') >> ws >> tmpi;
-                    vt.push_back(Tetelek(tmps, tmpi));
+                    vt.push_back(Tetelek(tmps, tmpi, vt.size()));
                     getline(befajl, clrs) >> ws;
                 }
                 befajl.close();
                 tetel = vt;
-                termekek->update(tetelek2string(tetel));
+                listFrissit();
                 egyenlegFrissit();
             }
             else {
