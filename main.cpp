@@ -4,6 +4,8 @@
 using namespace std;
 using namespace genv;
 
+const string fontfile = "/Users/levente/Desktop/ITK_graphicslib-master/LiberationSans-Regular.ttf";
+
 class Switcher : public Application {
     List * l1;
     List * l2;
@@ -21,8 +23,8 @@ public:
         v2.push_back("Udvozlom");
         v2.push_back("Viszlat");
 
-        l1 = new List(this, 10, 10, 200, 26, 400, v1);
-        l2 = new List(this, 250, 10, 200, 26, 400, v2);
+        l1 = new List(this, 10, 10, 200, 26, 400, v1, fontfile, 15);
+        l2 = new List(this, 250, 10, 200, 26, 400, v2, fontfile, 15);
 
         gout.load_font("/Users/levente/Desktop/ITK_graphicslib-master/LiberationSans-Regular.ttf", 15);
 
@@ -48,8 +50,8 @@ public:
                 delete l1;
                 delete l2;
                 _widgets.clear();
-                l1 = new List(this, 10, 10, 200, 26, 400, v1);
-                l2 = new List(this, 250, 10, 200, 26, 400, v2);
+                l1 = new List(this, 10, 10, 200, 26, 400, v1, fontfile, 15);
+                l2 = new List(this, 250, 10, 200, 26, 400, v2, fontfile, 15);
             }
         }
     }

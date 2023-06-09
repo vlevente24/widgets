@@ -64,12 +64,12 @@ public:
         cars.push_back(Car("Ferrari", "305", cars.size()));
         cars.push_back(Car("Tesla", "Model X", cars.size()));
         cars.push_back(Car("Trabant", "2", cars.size()));
-        carList = new List(this, 10, 10, 200, 26, 300, tostring(cars));
+        carList = new List(this, 10, 10, 200, 26, 300, tostring(cars), fontfile, 15);
         customers.push_back("Kis Miska");
         customers.push_back("Kukor Ica");
         customers.push_back("Vicc Elek");
-        customerList = new List(this, 230, 10, 200, 26, 300, customers);
-        rentList = new List(this, 450, 10, 200, 26, 300, vector<string>());
+        customerList = new List(this, 230, 10, 200, 26, 300, customers, fontfile, 15);
+        rentList = new List(this, 450, 10, 200, 26, 300, vector<string>(), fontfile, 15);
         rentCarBtn = new Button(this, 200, 350, 60, 30, "Rent", [=](){rent(); update();}, fontfile, 15, grey, black);
         backCarBtn = new Button(this, 300, 350, 60, 30, "Back", [=](){back(); update();}, fontfile, 15, grey, black);
         szures = new TextInput(this, 10, 350, 150, 30);
