@@ -3,7 +3,10 @@
 
 using namespace genv;
 
-Application::Application(genv::color background_color, int width, int height) : _bckgrnd_clr(background_color), _window_width(width), _window_height(height) {}
+Application::Application(genv::color background_color, int width, int height) : _bckgrnd_clr(background_color), _window_width(width), _window_height(height) {
+    gout.open(_window_width, _window_height);
+    gout << move_to(0, 0) << _bckgrnd_clr << box(_window_width, _window_height);
+}
 
 void Application::event_loop() {
     event ev;

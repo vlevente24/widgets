@@ -5,7 +5,7 @@
 using namespace genv;
 using namespace std;
 
-List::List(Application * app, int x, int y, int w, int h, int myd, vector<string> items) : Widget(app, x, y, w, h), _value(""), _y_down_max(myd), _y_down(0), _sv(items), _index(items.size()), _shift(0), _valuei(-1) {
+List::List(Application * app, int x, int y, int w, int h, int myd, vector<string> items, string fontfile, unsigned short fontsize) : Widget(app, x, y, w, h), _value(""), _y_down_max(myd), _y_down(0), _sv(items), _index(items.size()), _shift(0), _valuei(-1), _fontfile(fontfile), _fontsize(fontsize) {
     update(items);
 }
 List::~List() {
@@ -116,23 +116,28 @@ int List::getSelected() const {
 void List::update(vector<string> items) {
     for (size_t i = 0; i < _v.size(); i++) {delete _v[i];}
     _sv = items;
+    canvas c(1,1);
+    c.load_font(_fontfile, _fontsize);
+    int ca = c.cascent(), cd = c.cdescent();
     _v = vector<canvas*>(_sv.size() + 1);
     for (size_t i = 0; i < _sv.size(); i++) {
-        _v[i] = new canvas(_width, _sv.size() * (gout.cascent() + gout.cdescent() + 10));
-        * _v[i] << color(134, 134, 134) << box(_width, _sv.size() * (gout.cascent() + gout.cdescent() + 10)) << move_to(1, 0) << color(255, 255, 255) << box(_width - 2, _sv.size() * (gout.cascent() + gout.cdescent() + 10));
+        _v[i] = new canvas(_width, _sv.size() * (ca + cd + 10));
+        _v[i]->load_font(_fontfile, _fontsize);
+        * _v[i] << color(134, 134, 134) << box(_width, _sv.size() * (ca + cd + 10)) << move_to(1, 0) << color(255, 255, 255) << box(_width - 2, _sv.size() * (ca + cd + 10));
         for (size_t j = 0; j < _sv.size(); j++) {
             if (j == i) {
-                * _v[i] << move_to(1, j * (gout.cascent() + gout.cdescent() + 10)) << color(0, 120, 215) << box(_width - 2, gout.cascent() + gout.cdescent() + 10) << move_to(5, j * (gout.cascent() + gout.cdescent() + 10) + 5 + gout.cascent()) << color(255, 255, 255) << text(_sv[i]);
+                * _v[i] << move_to(1, j * (ca + cd + 10)) << color(0, 120, 215) << box(_width - 2, ca + cd + 10) << move_to(5, j * (ca + cd + 10) + 5) << color(255, 255, 255) << text(_sv[i]);
             }
             else {
-                * _v[i] << move_to(5, j * (gout.cascent() + gout.cdescent() + 10) + 5 + gout.cascent()) << color(0, 0, 0) << text(_sv[j]);
+                * _v[i] << move_to(5, j * (ca + cd + 10) + 5) << color(0, 0, 0) << text(_sv[j]);
             }
         }
     }
-    _v[_sv.size()] = new canvas(_width, _sv.size() * (gout.cascent() + gout.cdescent() + 10));
-    * _v[_sv.size()] << color(134, 134, 134) << box(_width, _sv.size() * (gout.cascent() + gout.cdescent() + 10)) << move_to(1, 0) << color(255, 255, 255) << box(_width - 2, _sv.size() * (gout.cascent() + gout.cdescent() + 10));
+    _v[_sv.size()] = new canvas(_width, _sv.size() * (ca + cd + 10));
+    _v[_sv.size()]->load_font(_fontfile, _fontsize);
+    * _v[_sv.size()] << color(134, 134, 134) << box(_width, _sv.size() * (ca + cd + 10)) << move_to(1, 0) << color(255, 255, 255) << box(_width - 2, _sv.size() * (ca + cd + 10));
     for (size_t j = 0; j < _sv.size(); j++) {
-        * _v[_sv.size()] << move_to(5, j * (gout.cascent() + gout.cdescent() + 10) + 5 + gout.cascent()) << color(0, 0, 0) << text(_sv[j]);
+        * _v[_sv.size()] << move_to(5, j * (ca + cd + 10) + 5) << color(0, 0, 0) << text(_sv[j]);
     }
     _value = "";
     _valuei = -1;

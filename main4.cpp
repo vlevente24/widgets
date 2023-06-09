@@ -24,9 +24,7 @@ class Zsamologep : public Application {
     vector<Button*> _funcbtn;
 public:
     Zsamologep() : Application(white,400, 520) {
-        gout.open(_window_width, _window_height);
         gout.load_font(fontfile, 15);
-        gout << move_to(0, 0) << _bckgrnd_clr << box(_window_width, _window_height);
 
         output = "";
         op = op2 = _count = 0;

@@ -18,3 +18,7 @@ void TextBox::reset() {}
 bool TextBox::is_selected(int a, int b) {
     return false;
 }
+
+void TextBox::update(std::string s) {
+    _text = s;
+}

@@ -60,9 +60,7 @@ class AutoBerles : public Application {
     TextInput * szures;
 public:
     AutoBerles() : Application(genv::color(0, 0, 0), 700, 400) {
-        gout.open(_window_width, _window_height);
         gout.load_font("/Users/levente/Desktop/ITK_graphicslib-master/LiberationSans-Regular.ttf", 15);
-        gout << move_to(0, 0) << _bckgrnd_clr << box(_window_width, _window_height);
         cars.push_back(Car("Ferrari", "305", cars.size()));
         cars.push_back(Car("Tesla", "Model X", cars.size()));
         cars.push_back(Car("Trabant", "2", cars.size()));

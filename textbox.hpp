@@ -14,6 +14,7 @@ public:
     virtual void print(bool marked) const override;
     virtual void handle(genv::event ev) override;
     virtual void reset() override;
+    void update(std::string s);
 };
 
 #endif

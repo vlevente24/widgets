@@ -24,9 +24,7 @@ public:
         l1 = new List(this, 10, 10, 200, 26, 400, v1);
         l2 = new List(this, 250, 10, 200, 26, 400, v2);
 
-        gout.open(_window_width, _window_height);
         gout.load_font("/Users/levente/Desktop/ITK_graphicslib-master/LiberationSans-Regular.ttf", 15);
-        gout << move_to(0, 0) << _bckgrnd_clr << box(_window_width, _window_height);
 
         for (Widget * ww : _widgets) {
             ww->print(false);

@@ -17,9 +17,7 @@ public:
     FilePrint() : Application(color(0, 255, 0), 300, 160), filename(new TextInput(this, 10, 30, 200, 26)),
                   text(new TextInput(this, 10, 120, 200, 26)), tb_f(new TextBox(this, 10, 10, 100, 20, "Fájl neve:")),
                   tb_t(new TextBox(this, 10, 100, 100, 20, "Beviteli szöveg:")), chb1(new CheckBox(this, 230, 70, 30)) {
-        gout.open(_window_width, _window_height);
         gout.load_font("/Users/levente/Desktop/ITK_graphicslib-master/LiberationSans-Regular.ttf", 15);
-        gout << move_to(0, 0) << _bckgrnd_clr << box(_window_width, _window_height);
 
         for (Widget * ww : _widgets) {
             ww->print(false);
