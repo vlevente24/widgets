@@ -96,8 +96,10 @@ public:
     }
     void arRendez() {
         rtetel = tetel;
-        for (size_t i = 0; i < rtetel.size() - 1; i++) {
-            for (size_t j = 0; j < rtetel.size() - 1 - i; j++) {
+        int tmp = rtetel.size();
+        tmp -= tmp > 0 ? 1 : 0;
+        for (size_t i = 0; i < tmp; i++) {
+            for (size_t j = 0; j < tmp - i; j++) {
                 if (rtetel[j + 1].ar > rtetel[j].ar) {
                     Tetelek tmp = rtetel[j + 1];
                     rtetel[j + 1] = rtetel[j];
