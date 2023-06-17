@@ -65,12 +65,12 @@ public:
         ar = new NumericIN(this, 20, 55, 150, 25, -10000, 10000);
         hozzaad = new Button(this, 190, 55, 100, 25, "Hozzáad", [=](){ujTetel();}, fontfile, 15, grey, black);
         modosit = new Button(this, 300, 55, 100, 25, "Módosít", [=](){modositTetel();}, fontfile, 15, grey, black);
-        egyenleg = new TextBox(this, 20, 90, 200, 20, "Egyenleg: 0 Ft");
+        egyenleg = new TextBox(this, 20, 90, "Egyenleg: 0 Ft");
         termekek = new List(this, 20, 110, 300, 25, 250, vector<string>(), fontfile, 15);
         vissza = new Button(this, 30, 160, 100, 25, "Vissza", [=](){torolTetel();}, fontfile, 15, grey, black);
         torol = new Button(this, 150, 160, 100, 25, "Törlés", [=](){mindenTorol();}, fontfile, 15, grey, black);
 
-        fajlszoveg = new TextBox(this, _window_width - 220, _window_height - 100, 100, 20, "Fájl neve:");
+        fajlszoveg = new TextBox(this, _window_width - 220, _window_height - 100, "Fájl neve:");
         fajlnev = new TextInput(this, _window_width - 220, _window_height - 80, 200, 25);
         betolt = new Button(this, _window_width - 110, _window_height - 45, 90, 25, "Betölt", [=](){betoltes();}, fontfile, 15, grey, black);
         kiment = new Button(this, _window_width - 210, _window_height - 45, 90, 25, "Mentés", [=](){mentes();}, fontfile, 15, grey, black);

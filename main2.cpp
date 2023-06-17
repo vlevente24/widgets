@@ -15,8 +15,8 @@ class FilePrint : public Application {
     CheckBox * chb1;
 public:
     FilePrint() : Application(color(0, 255, 0), 300, 160), filename(new TextInput(this, 10, 30, 200, 26)),
-                  text(new TextInput(this, 10, 120, 200, 26)), tb_f(new TextBox(this, 10, 10, 100, 20, "Fájl neve:")),
-                  tb_t(new TextBox(this, 10, 100, 100, 20, "Beviteli szöveg:")), chb1(new CheckBox(this, 230, 70, 30)) {
+                  text(new TextInput(this, 10, 120, 200, 26)), tb_f(new TextBox(this, 10, 10, "Fájl neve:")),
+                  tb_t(new TextBox(this, 10, 100, "Beviteli szöveg:")), chb1(new CheckBox(this, 230, 70, 30)) {
         gout.load_font("/Users/levente/Desktop/ITK_graphicslib-master/LiberationSans-Regular.ttf", 15);
 
         for (Widget * ww : _widgets) {

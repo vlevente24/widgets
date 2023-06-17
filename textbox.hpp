@@ -8,7 +8,7 @@ class TextBox : public Widget {
 protected:
     std::string _text;
 public:
-    TextBox(Application*, int x, int y, int w, int h, std::string text);
+    TextBox(Application*, int x, int y, std::string text);
     virtual ~TextBox() = default;
     bool is_selected(int, int) override;
     virtual void print(bool marked) const override;

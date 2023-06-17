@@ -4,7 +4,7 @@
 
 using namespace genv;
 
-TextBox::TextBox(Application * app, int x, int y, int w, int h, std::string text) : Widget(app, x, y, w, h), _text(text) {}
+TextBox::TextBox(Application * app, int x, int y, std::string text) : Widget(app, x, y, gout.twidth(text), gout.cascent() + gout.cdescent()), _text(text) {}
 
 void TextBox::print(bool marked) const {
     gout << _parent->get_color() << move_to(_xpos, _ypos) << box(_width, _height);
