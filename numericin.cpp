@@ -174,7 +174,7 @@ void NumericIN::cursorIncrease(int n) {
     if (_value < 0) {
         abs *= -1;
     }
-    if (abs >= _min and abs <= _max) {
+    if (abs >= _min and abs <= _max and _value != abs) {
         if (_value != 0 or abs / 10) {
             _cursor_pos += 1;
         }

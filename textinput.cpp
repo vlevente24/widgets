@@ -8,7 +8,8 @@
 using namespace genv;
 using namespace std;
 
-TextInput::TextInput(Application * app, int x, int y, int sx, int sy) : Widget(app, x, y, sx, sy), _text(""), _cursor_pos(0), _utf8_pos(utf8_character_index(_text)), _cursor_wait(0), _cursor_state(true) {}
+TextInput::TextInput(Application * app, int x, int y, int sx, int sy) : Widget(app, x, y, sx, sy), _text(""), _cursor_pos(0), _utf8_pos(utf8_character_index(_text)), _cursor_wait(0), _cursor_state(true), _f([](){}) {}
+TextInput::TextInput(Application * app, int x, int y, int sx, int sy, function<void()> f) : Widget(app, x, y, sx, sy), _text(""), _cursor_pos(0), _utf8_pos(utf8_character_index(_text)), _cursor_wait(0), _cursor_state(true), _f(f) {}
 
 void TextInput::print(bool marked) const {
     gout << (marked ? color(20, 131, 218) : color(134, 134, 134));
@@ -34,6 +35,7 @@ void TextInput::handle(event ev) {
             _cursor_pos -= (_cursor_pos - 1 >= 0 ? 1 : 0);
             _cursor_state = true;
             _cursor_wait = 0;
+            _f();
         }
         else if (gout.twidth(_text + ev.keyutf8) > _width - 2 * (2 + 5)) {}
         else if (ev.keycode == key_right and (_cursor_pos + 1) <= textreallength) {
@@ -53,6 +55,7 @@ void TextInput::handle(event ev) {
             _cursor_pos += (_cursor_pos + 1 <= textreallength ? 1 : 0);
             _cursor_state = true;
             _cursor_wait = 0;
+            _f();
         }
     }
     if (ev.type == ev_timer) {

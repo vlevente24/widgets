@@ -21,4 +21,6 @@ bool TextBox::is_selected(int a, int b) {
 
 void TextBox::update(std::string s) {
     _text = s;
+    print(false);
+    _width = gout.twidth(_text);
 }

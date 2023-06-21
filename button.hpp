@@ -12,7 +12,7 @@ class Button : public Widget {
     const genv::color backgroundColor;
     const genv::color textColor;
 public:
-    Button(Application * app, int x, int y, int w, int h, std::string text, std::function<void()> f,
+    Button(Application*, int x, int y, int w, int h, std::string text, std::function<void()> f,
            std::string fontfile, unsigned short fontsize, genv::color bclr, genv::color tclr);
     void print(bool) const override;
     void handle(genv::event) override;

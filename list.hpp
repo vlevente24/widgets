@@ -5,11 +5,13 @@
 #include "widgets.hpp"
 #include <vector>
 #include <string>
+#include <functional>
 
 class List : public Widget {
     std::vector<std::string> _sv;
     std::vector<genv::canvas*> _v;
     std::string _value;
+    std::function<void()> _f;
     const std::string _fontfile;
     const unsigned short _fontsize;
     int _y_down_max, _y_down, _index, _shift, _valuei;
@@ -18,6 +20,7 @@ class List : public Widget {
     int calc_index(int);
 public:
     List(Application*, int x, int y, int w, int h, int max_y_down, std::vector<std::string> items, std::string fontfile, unsigned short fontsize);
+    List(Application*, int x, int y, int w, int h, int max_y_down, std::vector<std::string> items, std::string fontfile, unsigned short fontsize, std::function<void()> f);
     ~List();
     void print(bool) const override;
     void handle(genv::event) override;

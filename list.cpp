@@ -5,9 +5,19 @@
 using namespace genv;
 using namespace std;
 
-List::List(Application * app, int x, int y, int w, int h, int myd, vector<string> items, string fontfile, unsigned short fontsize) : Widget(app, x, y, w, h), _value(""), _y_down_max(myd), _y_down(0), _sv(items), _index(items.size()), _shift(0), _valuei(-1), _fontfile(fontfile), _fontsize(fontsize) {
+List::List(Application * app, int x, int y, int w, int h, int myd, vector<string> items, string fontfile,
+           unsigned short fontsize) : Widget(app, x, y, w, h), _value(""), _y_down_max(myd), _y_down(0),
+           _sv(items), _index(items.size()), _shift(0), _valuei(-1), _fontfile(fontfile), _fontsize(fontsize),
+           _f([](){}) {
     update(items);
 }
+List::List(Application * app, int x, int y, int w, int h, int myd, vector<std::string> items, string fontfile,
+           unsigned short fontsize, function<void()> f) : Widget(app, x, y, w, h), _value(""), _y_down_max(myd),
+           _y_down(0), _sv(items), _index(items.size()), _shift(0), _valuei(-1), _fontfile(fontfile),
+           _fontsize(fontsize), _f(f) {
+    update(items);
+}
+
 List::~List() {
     for (size_t i = 0; i < _v.size(); i++) {
         delete _v[i];
@@ -18,7 +28,7 @@ void List::print(bool marked) const {
     gout << (marked ? color(20, 131, 218) : color(134, 134, 134));
     gout << move_to(_xpos, _ypos) << box(_width, _height) << move_to(_xpos + 2, _ypos + 2) << color(255, 255, 255) << box(_width - 4, _height - 4);
     gout << move_to(_xpos + 2 + 3, _ypos + 2 + 3) << color(0, 0, 0) << text(_value);
-    print_btn((_y_down > 0 ? true : false));
+    print_btn(_y_down > 0);
     if (_y_down > 0) {print_box();}
 }
 
@@ -62,6 +72,7 @@ void List::handle(event ev) {
                     _value = _sv[_index];
                     _valuei = _index;
                 }
+                _f();
                 reset();
             }
         }
