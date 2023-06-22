@@ -72,8 +72,8 @@ void List::handle(event ev) {
                     _value = _sv[_index];
                     _valuei = _index;
                 }
-                _f();
                 reset();
+                _f();
             }
         }
         if (ev.button == 0) {
